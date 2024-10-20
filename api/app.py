@@ -6,11 +6,17 @@ app = Flask(__name__)
 
 def get_stock_price(ticker="ZOMATO"):
     url = f'https://www.google.com/finance/quote/{ticker}:NSE'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    myClass = "YMlKec fxKbKc"
-    ans = float(soup.find(class_=myClass).text.strip()[1:].replace(',', ''))
-    return ans
+    try:
+        response = requests.get(url, timeout=3)  # Set a 3-second timeout
+        soup = BeautifulSoup(response.text, 'html.parser')
+        myClass = "YMlKec fxKbKc"
+        ans = float(soup.find(class_=myClass).text.strip()[1:].replace(',', ''))
+        return ans
+    except requests.exceptions.Timeout:
+        return "Timeout Error"
+    except Exception as e:
+        return str(e)
+
 
 @app.route('/')
 def index():
