@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock Price Tracker</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+      h1 {
+        font-size: 2.5em;
+      }
+      #price {
+        font-size: 3em;
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ZOMATO Stock Price</h1>
+    <div id="price"></div>
+
+    <script>
+      // Function to fetch stock price every second
+      function fetchPrice() {
+        fetch("/get_stock_price")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("price").innerHTML = "₹" + data.price;
+          })
+          .catch((error) => {
+            console.error("Error fetching the stock price:", error);
+          });
+      }
+
+      // Fetch price every 1 second (1000 milliseconds)
+      setInterval(fetchPrice, 1000);
+
+      // Fetch the initial price
+      fetchPrice();
+    </script>
+  </body>
+</html>
